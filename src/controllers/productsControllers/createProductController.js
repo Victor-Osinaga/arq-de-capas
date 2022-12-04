@@ -1,0 +1,18 @@
+import * as productsServices from '../../services/productsServices/index.js'
+
+const createProductController = async (req, res) => {
+    try {
+        const savedProduct = await productsServices.createProductService(req.body)
+        res.status(200).send({ status: 'OK', data: savedProduct })
+    } catch (error) {
+        if(error.msg == "the request's body is empty"){
+            res.status(400).send({status: "failed", data: {error: `${error.msg}`}})
+        }else if(error.msg == "the request's data is missing"){
+            res.status(400).send({status: "failed", data: {error: `${error.msg}: ${error.data}`}})
+        }else if(error.msg == "the product's name is already register"){
+            res.status(400).send({status: "failed", data: {error: `${error.msg}: ${error.data}`}})
+        }
+    }
+}
+
+export {createProductController}
